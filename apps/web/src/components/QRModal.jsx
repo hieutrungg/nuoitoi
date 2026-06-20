@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createDonation } from '../services/api';
-import { usePaymentSocket } from '../hooks/usePaymentSocket';
+import { usePaymentPolling } from '../hooks/usePaymentPolling';
 import { useDonationStore } from '../stores/donation.store';
 
 const fmt = (n) => n.toLocaleString('vi-VN') + 'đ';
+const mmss = (s) =>
+  `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
 export default function QRModal({ tier, onClose }) {
   const [tx, setTx] = useState(null);
@@ -16,13 +18,17 @@ export default function QRModal({ tier, onClose }) {
     createDonation({ tier: tier.key, amount: tier.amount }).then(setTx);
   }, [tier]);
 
-  // Lắng nghe WS cho txCode (hiện là stub).
-  usePaymentSocket(tx?.txCode, () => {
-    receiveDonation({ amount: tier.amount });
-    onClose();
+  // Poll SePay (qua serverless) mỗi 15s, tự ngừng sau 2 phút 30s.
+  const { state, secondsLeft } = usePaymentPolling(tx?.txCode, {
+    intervalMs: 15000,
+    timeoutMs: 150000,
+    onPaid: (res) => {
+      receiveDonation({ amount: tier.amount, name: res?.name, message: res?.message });
+      onClose();
+    },
   });
 
-  // DEMO: giả lập webhook báo thành công (thay cho việc quét QR thật).
+  // DEMO: giả lập SePay báo thành công (thay cho việc quét QR thật).
   const simulatePaid = () => {
     receiveDonation({ amount: tier.amount, name: 'Demo Donor', message: 'Test cho vui' });
     onClose();
@@ -45,13 +51,21 @@ export default function QRModal({ tier, onClose }) {
             exit={{ scale: 0.9, y: 20 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="font-pixel text-[10px] text-yellow-300">
+            <div className="font-pixel text-lg text-yellow-300">
               {tier.emoji} {tier.name} — {fmt(tier.amount)}
             </div>
 
             <div className="mx-auto mt-4 flex h-60 w-60 items-center justify-center rounded-xl bg-white">
               {tx ? (
-                <img src={tx.qrUrl} alt="QR" className="h-56 w-56" />
+                <img
+                  src={tx.qrUrl}
+                  alt="Mã QR thanh toán"
+                  className="h-56 w-56"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
               ) : (
                 <span className="text-purple-900">Đang tạo mã QR...</span>
               )}
@@ -63,9 +77,24 @@ export default function QRModal({ tier, onClose }) {
               </p>
             )}
 
+            {/* Trạng thái chờ xác nhận từ SePay */}
+            {tx && state === 'waiting' && (
+              <div className="mt-4 flex items-center justify-center gap-2 text-sm text-purple-200">
+                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
+                Đang chờ xác nhận... <span className="font-mono text-white">{mmss(secondsLeft)}</span>
+              </div>
+            )}
+
+            {tx && state === 'expired' && (
+              <p className="mt-4 text-sm text-yellow-300">
+                Chưa thấy giao dịch nào. Nếu bạn đã chuyển khoản, đợi thêm chút hoặc kiểm tra lại
+                nội dung CK nhé.
+              </p>
+            )}
+
             <button
               onClick={simulatePaid}
-              className="mt-5 w-full rounded-lg bg-green-500 py-2 font-pixel text-[9px] text-purple-950 hover:bg-green-400"
+              className="mt-5 w-full rounded-lg bg-green-500 py-2 font-pixel text-base font-bold text-purple-950 hover:bg-green-400"
             >
               ✅ GIẢ LẬP ĐÃ THANH TOÁN (DEMO)
             </button>

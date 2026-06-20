@@ -10,7 +10,7 @@ body {
   margin: 0;
   background: #0f0a1e;
   color: #e8e3ff;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
 }
 
 /* Giữ pixel sắc nét khi scale avatar */

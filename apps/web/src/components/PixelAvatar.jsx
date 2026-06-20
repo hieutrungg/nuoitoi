@@ -39,7 +39,7 @@ export default function PixelAvatar({ pulse }) {
       >
         <div className="text-6xl">{isActive ? '🤓' : '😵'}</div>
         <div className="mt-2 text-3xl">⌨️</div>
-        <div className="mt-3 font-pixel text-[8px] text-purple-300">
+        <div className="mt-3 font-pixel text-sm text-purple-300">
           {isActive ? 'TYPING...' : 'idle'} · f{frame}
         </div>
       </div>

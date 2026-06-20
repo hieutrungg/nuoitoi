@@ -8,7 +8,7 @@ export default function LiveFeed() {
 
   return (
     <section className="rounded-2xl border border-purple-800/50 bg-purple-950/30 p-6">
-      <h2 className="font-pixel text-[11px] text-green-300">📢 LIVE DONATE</h2>
+      <h2 className="font-pixel text-lg text-green-300">📢 LIVE DONATE</h2>
       <ul className="mt-4 space-y-2">
         <AnimatePresence initial={false}>
           {feed.map((d, i) => (

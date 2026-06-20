@@ -4,7 +4,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        pixel: ['"Press Start 2P"', 'monospace'],
+        // Pixel/display dùng Pixelify Sans, nhưng luôn có Be Vietnam Pro phía sau
+        // làm fallback phủ đủ dấu tiếng Việt -> không bao giờ lỗi glyph.
+        pixel: ['"Pixelify Sans"', '"Be Vietnam Pro"', 'sans-serif'],
+        sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         breathe: {

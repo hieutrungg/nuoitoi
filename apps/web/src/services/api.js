@@ -1,6 +1,14 @@
 // STUB API client. Khi có backend Fastify thì điền base URL + fetch thật.
 const BASE = import.meta.env.VITE_API_URL || '/api';
 
+// Hỏi trạng thái 1 giao dịch. Khi có serverless proxy SePay thì trỏ về
+// GET ${BASE}/status?tx=... và trả { status: 'PENDING' | 'SUCCESS' }.
+// Hiện là stub: luôn PENDING (chỉ nút "giả lập" trong demo mới xác nhận).
+export async function checkDonationStatus(txCode) {
+  // TODO: const res = await fetch(`${BASE}/status?tx=${txCode}`); return res.json();
+  return { status: 'PENDING', txCode };
+}
+
 export async function createDonation({ tier, amount, message, name }) {
   // TODO: POST ${BASE}/donations/create
   // Trả về { qrUrl, txCode, amount }

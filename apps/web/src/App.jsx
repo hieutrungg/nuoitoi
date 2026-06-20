@@ -38,7 +38,7 @@ export default function App() {
         <ExpenseChart />
       </div>
 
-      <footer className="mt-12 text-center font-pixel text-[7px] leading-relaxed text-purple-500">
+      <footer className="mt-12 text-center font-pixel text-xs leading-relaxed text-purple-500">
         🍜 NUÔI TÔI · MỘT DỰ ÁN VỪA HỌC VỪA KIẾM CƠM
       </footer>
 

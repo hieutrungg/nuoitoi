@@ -13,7 +13,7 @@ export default function SurvivalProgress() {
     <section className="rounded-2xl border border-purple-800/50 bg-purple-950/30 p-6">
       <div className="mb-3 flex items-end justify-between">
         <div>
-          <div className="font-pixel text-[10px] text-purple-300">TRẠNG THÁI SINH TỒN</div>
+          <div className="font-pixel text-sm text-purple-300">TRẠNG THÁI SINH TỒN</div>
           <div className="mt-1 text-lg font-bold text-yellow-300">{stage.label}</div>
         </div>
         <div className="text-right text-sm text-purple-200">
@@ -28,7 +28,7 @@ export default function SurvivalProgress() {
         />
       </div>
 
-      <div className="mt-3 flex justify-between font-pixel text-[7px] text-purple-400">
+      <div className="mt-3 flex flex-wrap justify-between gap-1 font-pixel text-xs text-purple-400">
         {SURVIVAL_STAGES.map((s) => (
           <span key={s.label} className={total >= s.min ? 'text-green-400' : ''}>
             {s.label}

@@ -17,7 +17,7 @@ export default function HeroBanner({ onOpenTiers }) {
         <PixelAvatar pulse={pulse} />
       </motion.div>
 
-      <h1 className="font-pixel text-xl leading-relaxed text-yellow-300 sm:text-2xl">
+      <h1 className="font-pixel text-4xl font-bold leading-relaxed text-yellow-300 sm:text-5xl">
         NUÔI TÔI
       </h1>
       <p className="mx-auto mt-4 max-w-xl text-sm text-purple-200 sm:text-base">
@@ -26,7 +26,7 @@ export default function HeroBanner({ onOpenTiers }) {
 
       <button
         onClick={onOpenTiers}
-        className="mt-8 rounded-full bg-yellow-400 px-8 py-3 font-pixel text-[10px] text-purple-950 transition hover:bg-yellow-300 active:scale-95"
+        className="mt-8 rounded-full bg-yellow-400 px-8 py-3 font-pixel text-lg font-bold text-purple-950 transition hover:bg-yellow-300 active:scale-95"
       >
         CỨU TÔI NGAY 🍜
       </button>
