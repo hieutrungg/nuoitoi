@@ -9,7 +9,7 @@ const CSP = [
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // Tailwind/Framer/Recharts dùng inline style
   'font-src https://fonts.gstatic.com',
-  "img-src 'self' data: https://api.qrserver.com",
+  "img-src 'self' data: https://img.vietqr.io",
   "connect-src 'self' ws: wss:", // chừa sẵn cho WebSocket realtime
   "base-uri 'self'",
   "form-action 'self'",

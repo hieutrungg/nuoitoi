@@ -10,7 +10,7 @@ import { checkDonationStatus } from '../services/api';
 // State: 'idle' | 'waiting' | 'paid' | 'expired'
 export function usePaymentPolling(
   txCode,
-  { onPaid, intervalMs = 15000, timeoutMs = 150000 } = {}
+  { onPaid, amount = 0, intervalMs = 15000, timeoutMs = 150000 } = {}
 ) {
   const [state, setState] = useState('idle');
   const [secondsLeft, setSecondsLeft] = useState(Math.round(timeoutMs / 1000));
@@ -54,7 +54,7 @@ export function usePaymentPolling(
       if (document.hidden) return;
 
       try {
-        const res = await checkDonationStatus(txCode);
+        const res = await checkDonationStatus(txCode, amount);
         if (stopped) return;
         if (res?.status === 'SUCCESS') {
           setState('paid');

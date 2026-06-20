@@ -15,15 +15,16 @@ export default function QRModal({ tier, onClose }) {
   useEffect(() => {
     if (!tier) return;
     setTx(null);
-    createDonation({ tier: tier.key, amount: tier.amount }).then(setTx);
+    createDonation({ amount: tier.amount }).then(setTx);
   }, [tier]);
 
   // Poll SePay (qua serverless) mỗi 15s, tự ngừng sau 2 phút 30s.
   const { state, secondsLeft } = usePaymentPolling(tx?.txCode, {
+    amount: tier?.amount,
     intervalMs: 15000,
     timeoutMs: 150000,
     onPaid: (res) => {
-      receiveDonation({ amount: tier.amount, name: res?.name, message: res?.message });
+      receiveDonation({ amount: res?.amount || tier.amount, name: res?.name });
       onClose();
     },
   });
@@ -92,12 +93,16 @@ export default function QRModal({ tier, onClose }) {
               </p>
             )}
 
-            <button
-              onClick={simulatePaid}
-              className="mt-5 w-full rounded-lg bg-green-500 py-2 font-pixel text-base font-bold text-purple-950 hover:bg-green-400"
-            >
-              ✅ GIẢ LẬP ĐÃ THANH TOÁN (DEMO)
-            </button>
+            {/* Nút demo CHỈ hiện khi chạy dev (npm run dev), tự ẩn ở bản build
+                production để tránh người lạ tự bấm "đã thanh toán". */}
+            {import.meta.env.DEV && (
+              <button
+                onClick={simulatePaid}
+                className="mt-5 w-full rounded-lg bg-green-500 py-2 font-pixel text-base font-bold text-purple-950 hover:bg-green-400"
+              >
+                ✅ GIẢ LẬP ĐÃ THANH TOÁN (DEMO)
+              </button>
+            )}
             <button
               onClick={onClose}
               className="mt-2 w-full rounded-lg border border-purple-700 py-2 text-xs text-purple-300 hover:bg-purple-900"
